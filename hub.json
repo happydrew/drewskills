@@ -1,0 +1,26 @@
+{
+  "owner": {
+    "name": "Drew Grant",
+    "code": "happydrew",
+    "contact": "https://github.com/happydrew"
+  },
+  "repository": {
+    "provider": "github",
+    "owner": "happydrew",
+    "name": "drewskills",
+    "defaultBranch": "main",
+    "cloneUrl": "https://github.com/happydrew/drewskills.git",
+    "webUrl": "https://github.com/happydrew/drewskills"
+  },
+  "paths": {
+    "canonicalSkills": "skills",
+    "packs": "packs",
+    "docs": "docs",
+    "public": "public"
+  },
+  "defaults": {
+    "packVersion": "1.0.1",
+    "defaultPack": "foundation",
+    "plugin": "drew-foundation"
+  }
+}

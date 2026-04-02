@@ -1,0 +1,21 @@
+{
+  "name": "import-third-party-skill",
+  "title": "Import Third-Party Skill",
+  "description": "Import an open-source third-party skill or skill repository into Drew Grant's personal Skills Hub from any working directory.",
+  "owners": [
+    "happydrew"
+  ],
+  "tags": [
+    "meta-skill",
+    "import",
+    "migration",
+    "sync",
+    "automation"
+  ],
+  "agents": [
+    "claude-code",
+    "codex"
+  ],
+  "pack": "foundation",
+  "status": "stable"
+}

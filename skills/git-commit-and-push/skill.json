@@ -1,0 +1,20 @@
+{
+  "name": "git-commit-and-push",
+  "title": "Git Commit And Push",
+  "description": "When the user wants to commit and push the current repository changes, stage the work, generate a concise message, commit, and push to the current branch.",
+  "owners": [
+    "happydrew"
+  ],
+  "tags": [
+    "git",
+    "commit",
+    "push",
+    "automation"
+  ],
+  "agents": [
+    "claude-code",
+    "codex"
+  ],
+  "pack": "foundation",
+  "status": "stable"
+}

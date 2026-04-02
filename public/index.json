@@ -1,0 +1,49 @@
+[
+  {
+    "name": "git-commit-and-push",
+    "title": "Git Commit And Push",
+    "description": "When the user wants to commit and push the current repository changes, stage the work, generate a concise message, commit, and push to the current branch.",
+    "owners": [
+      "happydrew"
+    ],
+    "tags": [
+      "git",
+      "commit",
+      "push",
+      "automation"
+    ],
+    "agents": [
+      "claude-code",
+      "codex"
+    ],
+    "pack": "foundation",
+    "status": "stable",
+    "plugin": "drew-foundation",
+    "pluginDescription": "Drew Grant's generated skill catalog.",
+    "path": "skills/git-commit-and-push"
+  },
+  {
+    "name": "import-third-party-skill",
+    "title": "Import Third-Party Skill",
+    "description": "Import an open-source third-party skill or skill repository into Drew Grant's personal Skills Hub from any working directory.",
+    "owners": [
+      "happydrew"
+    ],
+    "tags": [
+      "meta-skill",
+      "import",
+      "migration",
+      "sync",
+      "automation"
+    ],
+    "agents": [
+      "claude-code",
+      "codex"
+    ],
+    "pack": "foundation",
+    "status": "stable",
+    "plugin": "drew-foundation",
+    "pluginDescription": "Drew Grant's generated skill catalog.",
+    "path": "skills/import-third-party-skill"
+  }
+]

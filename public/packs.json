@@ -1,0 +1,12 @@
+[
+  {
+    "name": "foundation",
+    "version": "1.0.1",
+    "plugin": "drew-foundation",
+    "description": "Drew Grant's default skill pack for Git workflow and third-party skill import.",
+    "skills": [
+      "git-commit-and-push",
+      "import-third-party-skill"
+    ]
+  }
+]
