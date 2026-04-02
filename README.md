@@ -12,7 +12,7 @@ Repository:
 ```text
 skills/         canonical skills source
 packs/          logical skill packs
-docs/           usage and maintenance docs
+docs/           minimal usage and maintenance docs
 scripts/        validation and scaffolding
 AGENTS.md       repository-level guidance
 hub.json        repository-level metadata
@@ -54,3 +54,8 @@ npx skills add https://github.com/happydrew/drewskills.git --agent codex -g --sk
 ```powershell
 python .\scripts\validate_registry.py
 ```
+
+## Docs
+
+- `docs/03-用户手册.md`
+- `docs/04-技能开发与贡献手册.md`
