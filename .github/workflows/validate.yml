@@ -15,5 +15,3 @@ jobs:
           python-version: "3.12"
       - name: Validate registry
         run: python scripts/validate_registry.py
-      - name: Build public catalog
-        run: python scripts/build_public_catalog.py

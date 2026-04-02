@@ -10,7 +10,6 @@ ROOT = Path(__file__).resolve().parents[1]
 HUB_CONFIG = ROOT / "hub.json"
 SKILLS_DIR = ROOT / "skills"
 PACKS_DIR = ROOT / "packs"
-PUBLIC_DIR = ROOT / "public"
 FORBIDDEN_INSTALL_DIRS = [".agent", ".agents", ".claude"]
 
 
@@ -126,7 +125,6 @@ def main() -> int:
         validate_hub_config()
         skill_names = validate_skills_dir(SKILLS_DIR)
         skill_count = len(skill_names)
-        ensure(PUBLIC_DIR.exists(), f"Missing public directory: {PUBLIC_DIR}")
 
         for pack_path in sorted(PACKS_DIR.glob("*.json")):
             validate_pack(pack_path, skill_names)

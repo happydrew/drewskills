@@ -13,8 +13,7 @@ Repository:
 skills/         canonical skills source
 packs/          logical skill packs
 docs/           usage and maintenance docs
-scripts/        validation, scaffolding, and catalog generation
-public/         generated static catalog and landing page
+scripts/        validation and scaffolding
 AGENTS.md       repository-level guidance
 hub.json        repository-level metadata
 ```
@@ -54,5 +53,4 @@ npx skills add https://github.com/happydrew/drewskills.git --agent codex -g --sk
 
 ```powershell
 python .\scripts\validate_registry.py
-python .\scripts\build_public_catalog.py
 ```

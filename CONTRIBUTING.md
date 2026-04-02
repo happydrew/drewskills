@@ -25,7 +25,6 @@ python .\scripts\new_skill.py `
 
 ```powershell
 python .\scripts\validate_registry.py
-python .\scripts\build_public_catalog.py
 ```
 
 ## 评审标准

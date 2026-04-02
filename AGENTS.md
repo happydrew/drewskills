@@ -24,8 +24,7 @@ Drew Grant Skills Hub 是一个公开的个人技能源仓库。
 - `skills/`：唯一权威技能源
 - `packs/`：技能逻辑分组
 - `docs/`：使用与维护文档
-- `public/`：静态发布页与索引产物
-- `scripts/`：校验、脚手架和静态索引生成脚本
+- `scripts/`：校验与脚手架脚本
 
 ## 使用原则
 
