@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sharp Image Converter"
+  short_description: "Convert and batch-convert images with sharp"
+  default_prompt: "Use $sharp-image-converter to convert one or more images with sharp."

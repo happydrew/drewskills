@@ -1,0 +1,20 @@
+{
+  "name": "sharp-image-converter",
+  "title": "Sharp Image Converter",
+  "description": "Convert images between formats (PNG, JPEG, WebP, AVIF, TIFF, GIF) and perform batch conversions using the sharp library. Use when users request image format conversion, converting images to WebP/AVIF, batch image processing, or optimizing images for web. Triggers include \"convert image to\", \"change format to\", \"batch convert images\", or \"optimize images\".",
+  "owners": [
+    "happydrew"
+  ],
+  "tags": [
+    "third-party",
+    "imported",
+    "migration"
+  ],
+  "agents": [
+    "claude-code",
+    "codex"
+  ],
+  "pack": "foundation",
+  "status": "draft",
+  "source": "C:\\Users\\zhuge\\.agents\\skills\\sharp-image-converter"
+}
