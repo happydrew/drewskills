@@ -19,7 +19,7 @@
     "public": "public"
   },
   "defaults": {
-    "packVersion": "1.0.1",
+    "packVersion": "1.1.0",
     "defaultPack": "foundation",
     "plugin": "drew-foundation"
   }

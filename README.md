@@ -48,6 +48,7 @@ npx skills add https://github.com/happydrew/drewskills.git --agent codex -g --sk
 
 - `git-commit-and-push`
 - `import-third-party-skill`
+- `playwright-mcp-setup-windows`
 
 ## Maintenance
 

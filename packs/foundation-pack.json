@@ -1,11 +1,12 @@
 {
   "name": "foundation",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "plugin": "drew-foundation",
-  "description": "Drew Grant's default skill pack for Git workflow and third-party skill import.",
+  "description": "Drew Grant's default skill pack for Git workflow, third-party skill import, and Playwright MCP setup on Windows.",
   "skills": [
     "git-commit-and-push",
     "import-third-party-skill",
-    "sharp-image-converter"
+    "sharp-image-converter",
+    "playwright-mcp-setup-windows"
   ]
 }

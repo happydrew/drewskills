@@ -1,0 +1,4 @@
+interface:
+  display_name: "Playwright MCP Setup Windows"
+  short_description: "Install, repair, and verify Playwright MCP with local Chrome on Windows."
+  default_prompt: "Set up or repair the official Playwright MCP environment on Windows for Codex using local Chrome and a persistent profile, then verify browsing and interaction work."
