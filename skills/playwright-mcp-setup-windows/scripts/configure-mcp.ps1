@@ -3,7 +3,7 @@ param(
     [string]$ChromePath,
     [string]$ProfileDir,
     [int]$NavigationTimeoutMs = 90000,
-    [string]$ViewportSize = '1400x900',
+    [string]$ViewportSize = '1600x900',
     [switch]$ForceRecreate
 )
 
@@ -39,6 +39,9 @@ if (-not $ProfileDir) {
     $ProfileDir = Join-Path $env:LocalAppData "ms-playwright\mcp-chrome-profile"
 }
 
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$launcherPath = Join-Path $scriptDir 'launch-playwright-mcp.ps1'
+
 New-Item -ItemType Directory -Force -Path $ProfileDir | Out-Null
 
 $existing = $null
@@ -50,10 +53,14 @@ try {
 
 $needsReplace = $ForceRecreate.IsPresent
 if ($existing) {
-    if ($existing -notmatch '@playwright/mcp') { $needsReplace = $true }
-    if ($existing -notmatch '--browser chrome') { $needsReplace = $true }
-    if ($existing -notmatch '--user-data-dir') { $needsReplace = $true }
+    if ($existing -notmatch [regex]::Escape($launcherPath)) { $needsReplace = $true }
     if ($existing -notmatch [regex]::Escape($ChromePath)) { $needsReplace = $true }
+    if ($existing -notmatch [regex]::Escape($ProfileDir)) { $needsReplace = $true }
+    if ($ViewportSize) {
+        if ($existing -notmatch ('-ViewportSize\s+' + [regex]::Escape($ViewportSize))) { $needsReplace = $true }
+    } elseif ($existing -match '-ViewportSize\s+\S+') {
+        $needsReplace = $true
+    }
 }
 
 if ($existing -and $needsReplace) {
@@ -61,7 +68,19 @@ if ($existing -and $needsReplace) {
 }
 
 if (-not $existing -or $needsReplace) {
-    codex mcp add $McpName -- npx -y @playwright/mcp@latest --browser chrome --executable-path $ChromePath --user-data-dir $ProfileDir --timeout-navigation $NavigationTimeoutMs --viewport-size $ViewportSize | Out-Null
+    $addArgs = @(
+        'mcp', 'add', $McpName, '--',
+        'powershell', '-ExecutionPolicy', 'Bypass', '-File', $launcherPath,
+        '-ChromePath', $ChromePath,
+        '-ProfileDir', $ProfileDir,
+        '-NavigationTimeoutMs', $NavigationTimeoutMs
+    )
+
+    if ($ViewportSize) {
+        $addArgs += @('-ViewportSize', $ViewportSize)
+    }
+
+    & codex @addArgs | Out-Null
 }
 
 codex mcp get $McpName

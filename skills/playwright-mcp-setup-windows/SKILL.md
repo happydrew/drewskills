@@ -91,7 +91,7 @@ Default behavior of the configuration script:
 - uses `--browser chrome`
 - uses a persistent profile directory
 - sets a larger navigation timeout
-- sets a fixed viewport
+- sets a fixed viewport, defaulting to `1600x900`
 
 If the script cannot find Chrome automatically, stop and ask the user for the Chrome executable path.
 

@@ -37,14 +37,19 @@ $playwrightConfigured = $false
 $usesOfficialPackage = $false
 $usesChrome = $false
 $usesPersistentProfile = $false
+$viewportSize = $null
 
 try {
     if ($codexPath -and $mcpList -match '(?m)^\s*playwright\s') {
         $playwrightConfigured = $true
         $mcpGet = codex mcp get playwright 2>&1 | Out-String
-        $usesOfficialPackage = $mcpGet -match '@playwright/mcp'
-        $usesChrome = $mcpGet -match '--browser chrome'
-        $usesPersistentProfile = $mcpGet -match '--user-data-dir'
+        $usesOfficialPackage = ($mcpGet -match '@playwright/mcp') -or ($mcpGet -match 'launch-playwright-mcp\.ps1')
+        $usesChrome = ($mcpGet -match '--browser chrome') -or ($mcpGet -match '-ChromePath')
+        $usesPersistentProfile = ($mcpGet -match '--user-data-dir') -or ($mcpGet -match '-ProfileDir')
+        $match = [regex]::Match($mcpGet, '(?:--viewport-size|-ViewportSize)\s+(\S+)')
+        if ($match.Success) {
+            $viewportSize = $match.Groups[1].Value
+        }
     }
 } catch {
     $mcpGet = $_ | Out-String
@@ -65,6 +70,7 @@ try {
     uses_official_package = $usesOfficialPackage
     uses_chrome = $usesChrome
     uses_persistent_profile = $usesPersistentProfile
+    viewport_size = $viewportSize
 } | ConvertTo-Json -Depth 3
 
 if ($mcpGet) {

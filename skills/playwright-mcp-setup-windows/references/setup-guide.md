@@ -25,13 +25,24 @@ This is a setup strategy, not a guarantee against detection or challenges.
 Recommended argument shape:
 
 ```text
+powershell -ExecutionPolicy Bypass -File <launch-script>
+-ChromePath <chrome-path>
+-ProfileDir <persistent-profile-dir>
+-NavigationTimeoutMs 90000
+```
+
+The launch script then starts:
+
+```text
 npx -y @playwright/mcp@latest
 --browser chrome
 --executable-path <chrome-path>
 --user-data-dir <persistent-profile-dir>
 --timeout-navigation 90000
---viewport-size 1400x900
+--viewport-size 1600x900
 ```
+
+If you pass `-ViewportSize`, that fixed size is used instead of the default `1600x900`.
 
 ## Why Not Use The Daily Chrome Profile
 
