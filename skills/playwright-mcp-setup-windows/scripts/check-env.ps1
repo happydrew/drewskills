@@ -17,42 +17,65 @@ function Find-ChromePath {
     return $candidates | Select-Object -First 1
 }
 
+function Read-McpEntry {
+    param([string]$Name)
+
+    try {
+        $detail = codex mcp get $Name 2>&1 | Out-String
+    } catch {
+        return [PSCustomObject]@{
+            configured = $false
+        }
+    }
+
+    $viewportSize = $null
+    $viewportMatch = [regex]::Match($detail, '(?:--viewport-size|-ViewportSize)\s+(\S+)')
+    if ($viewportMatch.Success) {
+        $viewportSize = $viewportMatch.Groups[1].Value
+    }
+
+    $browserLocale = $null
+    $localeMatch = [regex]::Match($detail, '-BrowserLocale\s+(\S+)')
+    if ($localeMatch.Success) {
+        $browserLocale = $localeMatch.Groups[1].Value
+    }
+
+    $profileMode = $null
+    $profileModeMatch = [regex]::Match($detail, '-ProfileMode\s+(\S+)')
+    if ($profileModeMatch.Success) {
+        $profileMode = $profileModeMatch.Groups[1].Value
+    }
+
+    $profileDir = $null
+    $profileDirMatch = [regex]::Match($detail, '-ProfileDir\s+(.+?)(?:\s+-|$)')
+    if ($profileDirMatch.Success) {
+        $profileDir = $profileDirMatch.Groups[1].Value.Trim()
+    }
+
+    return [PSCustomObject]@{
+        configured = $true
+        uses_official_package = ($detail -match '@playwright/mcp') -or ($detail -match 'launch-playwright-mcp\.ps1')
+        uses_local_chrome = ($detail -match '-ChromePath')
+        profile_mode = $profileMode
+        profile_dir = $profileDir
+        browser_locale = $browserLocale
+        viewport_size = $viewportSize
+        detail = $detail.Trim()
+    }
+}
+
 $chromePath = Find-ChromePath
 $codexPath = Get-CommandPath 'codex'
 $nodePath = Get-CommandPath 'node'
 $npxPath = Get-CommandPath 'npx'
-$playwrightMcpCmd = Get-CommandPath 'playwright-mcp'
 
-$mcpList = ''
-try {
-    if ($codexPath) {
-        $mcpList = codex mcp list 2>&1 | Out-String
+$entries = @('playwright-temp-userdir', 'playwright-fixed-userdir')
+$entryStatus = @{}
+
+if ($codexPath) {
+    foreach ($entry in $entries) {
+        $entryStatus[$entry] = Read-McpEntry -Name $entry
     }
-} catch {
-    $mcpList = $_ | Out-String
-}
-
-$mcpGet = ''
-$playwrightConfigured = $false
-$usesOfficialPackage = $false
-$usesChrome = $false
-$usesPersistentProfile = $false
-$viewportSize = $null
-
-try {
-    if ($codexPath -and $mcpList -match '(?m)^\s*playwright\s') {
-        $playwrightConfigured = $true
-        $mcpGet = codex mcp get playwright 2>&1 | Out-String
-        $usesOfficialPackage = ($mcpGet -match '@playwright/mcp') -or ($mcpGet -match 'launch-playwright-mcp\.ps1')
-        $usesChrome = ($mcpGet -match '--browser chrome') -or ($mcpGet -match '-ChromePath')
-        $usesPersistentProfile = ($mcpGet -match '--user-data-dir') -or ($mcpGet -match '-ProfileDir')
-        $match = [regex]::Match($mcpGet, '(?:--viewport-size|-ViewportSize)\s+(\S+)')
-        if ($match.Success) {
-            $viewportSize = $match.Groups[1].Value
-        }
-    }
-} catch {
-    $mcpGet = $_ | Out-String
 }
 
 [PSCustomObject]@{
@@ -64,17 +87,6 @@ try {
     npx_path = $npxPath
     chrome_found = [bool]$chromePath
     chrome_path = $chromePath
-    playwright_mcp_cmd_found = [bool]$playwrightMcpCmd
-    playwright_mcp_cmd_path = $playwrightMcpCmd
-    playwright_mcp_configured = $playwrightConfigured
-    uses_official_package = $usesOfficialPackage
-    uses_chrome = $usesChrome
-    uses_persistent_profile = $usesPersistentProfile
-    viewport_size = $viewportSize
-} | ConvertTo-Json -Depth 3
-
-if ($mcpGet) {
-    Write-Output '--- MCP DETAIL START ---'
-    Write-Output $mcpGet.Trim()
-    Write-Output '--- MCP DETAIL END ---'
-}
+    recommended_entries = $entries
+    recommended_entry_status = $entryStatus
+} | ConvertTo-Json -Depth 5

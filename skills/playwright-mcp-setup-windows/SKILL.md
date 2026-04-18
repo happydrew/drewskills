@@ -1,54 +1,71 @@
 ---
 name: playwright-mcp-setup-windows
-description: Install, repair, and validate the official @playwright/mcp browser automation environment on Windows for Codex. Default to local Chrome plus a persistent profile so browser behavior is closer to a real user session. Use when the user asks to install, configure, fix, bootstrap, or verify Playwright MCP, local Chrome browser automation, persistent browser profile setup, or browser capability initialization in a new agent environment. Do not use for routine day-to-day browsing tasks once the environment is already working.
+description: Install, repair, and validate the official @playwright/mcp browser automation environment on Windows for Codex. Default to local Chrome, English browser locale, and two MCP entries for temporary and fixed user-data-dir workflows. Use when the user asks to install, configure, fix, bootstrap, or verify Playwright MCP, local Chrome browser automation, temp/fixed profile setup, English browser defaults, or browser capability initialization in a new agent environment. Do not use for routine day-to-day browsing tasks once the environment is already working.
 ---
 
 # Playwright MCP Setup Windows
 
 ## Purpose
 
-This skill is for environment bootstrap and repair, not for routine browsing.
+This skill is for environment bootstrap, repair, and validation.
+It is not the skill for routine browser operation after setup is complete.
 
-Its job is to make a Windows Codex environment ready to use the official `@playwright/mcp` with:
+Its job is to turn a Windows Codex environment into a reusable Playwright MCP baseline with these defaults:
 
+- official `@playwright/mcp`
 - local Chrome
-- a persistent browser profile
-- a verified browsing and interaction path
+- English browser locale by default
+- two MCP entries:
+  - `playwright-temp-userdir`
+  - `playwright-fixed-userdir`
+- verified browsing and interaction
 
-Default to the official MCP route first.
-Default to local Chrome plus a persistent profile.
-Treat extension attachment as a later upgrade path, not the initial baseline.
+The runtime browsing work should happen through the MCP tools themselves.
+This skill exists to install and maintain the environment those tools depend on.
+
+## Why This Baseline
+
+The skill should standardize a setup that has proven practical and stable across Windows machines:
+
+- local Chrome is usually more stable and closer to real user browsing than a generic bundled browser path
+- English browser defaults reduce language-dependent UI variance during automation
+- a temporary profile entry is safer for parallel Codex windows and one-off tasks
+- a fixed profile entry is better for login persistence and session reuse
+- a dedicated MCP profile is safer than using the user's daily Chrome profile
+- a fresh-process verification step catches real configuration problems instead of trusting the current session state
 
 ## When To Use
 
 Use this skill when the user wants any of the following:
 
 - install Playwright MCP
-- configure browser automation for Codex
+- configure browser automation for Codex on Windows
 - make Codex use local Chrome
-- set up a persistent browser profile
+- set up `playwright-temp-userdir` and `playwright-fixed-userdir`
+- make the Playwright browser default to English
 - repair a broken Playwright MCP setup
-- validate browser capability in a new agent environment
+- validate browser capability in a new or changed environment
 
-Do not use this skill for normal browsing work if the browser environment is already installed and healthy.
+Do not use this skill for normal browsing work once the environment is already healthy.
 
 ## References
 
-Read [setup-guide.md](references/setup-guide.md) for the default architecture, parameter choices, and validation strategy.
+Read [setup-guide.md](references/setup-guide.md) for the configuration architecture, defaults, and validation standard.
 
 ## Scripts
 
 Use the bundled scripts rather than retyping the same logic:
 
 - `scripts/check-env.ps1`
-  - checks whether `codex`, `node`, `npx`, Chrome, and Playwright MCP are available
-  - reports the current MCP configuration state
+  - checks whether `codex`, `node`, `npx`, and Chrome are available
+  - reports the status of the recommended MCP entries
 - `scripts/configure-mcp.ps1`
-  - installs or repairs the `playwright` MCP entry
-  - defaults to local Chrome and a persistent profile
+  - with no arguments, installs or repairs both recommended MCP entries
+  - can also repair or create a single named entry
+  - defaults to local Chrome, English locale, and the recommended profile modes
 - `scripts/verify-mcp.ps1`
-  - runs smoke tests through a fresh `codex exec` process
-  - verifies both browsing and basic interaction
+  - by default verifies both recommended MCP entries in fresh `codex exec` processes
+  - checks English locale, page navigation, and basic interaction
 
 ## Workflow
 
@@ -71,29 +88,38 @@ If any of these are missing, the environment is not ready:
 - `npx`
 - Chrome executable
 
-If the `playwright` MCP entry is absent, install it.
-If the entry exists but does not use the official `@playwright/mcp` route with local Chrome and a persistent profile, repair it.
-If the entry already matches the expected baseline, skip reconfiguration unless the user explicitly wants a reset.
+If the recommended Playwright MCP entries are absent, install them.
+If they exist but do not match the baseline, repair them.
+If they already match the baseline, do not reconfigure unless the user explicitly wants a reset.
 
-### 3. Configure the MCP
+### 3. Configure the MCP entries
 
-Run:
+Default install or repair:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File "<skill-dir>\scripts\configure-mcp.ps1"
 ```
 
+This should produce the recommended pair:
+
+- `playwright-temp-userdir`
+- `playwright-fixed-userdir`
+
 Default behavior of the configuration script:
 
-- chooses a common Windows Chrome path automatically when possible
-- uses MCP name `playwright`
+- finds a common local Chrome path automatically when possible
 - uses official `@playwright/mcp@latest`
-- uses `--browser chrome`
-- uses a persistent profile directory
+- defaults browser locale to `en-US`
+- creates a temporary-profile entry and a fixed-profile entry
+- uses a dedicated fixed profile directory instead of the daily Chrome profile
 - sets a larger navigation timeout
 - sets a fixed viewport, defaulting to `1600x900`
 
-If the script cannot find Chrome automatically, stop and ask the user for the Chrome executable path.
+Single-entry override is allowed when the environment needs a custom name or mode:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File "<skill-dir>\scripts\configure-mcp.ps1" -McpName my-playwright-temp -ProfileMode temporary
+```
 
 ### 4. Verify in a fresh process
 
@@ -109,8 +135,8 @@ This matters because a fresh `codex exec` process re-reads MCP configuration and
 
 If configuration succeeds, tell the user:
 
-- whether the MCP entry is now installed
-- whether smoke tests passed
+- which MCP entries are now installed
+- whether verification passed
 - whether a new Codex session is recommended before routine use
 
 Do not claim that the current running Codex session will always hot-load the new MCP.
@@ -121,7 +147,9 @@ Use these defaults unless the user asks otherwise:
 
 - official `@playwright/mcp`
 - local Chrome
-- persistent profile
+- English locale (`en-US`)
+- `playwright-temp-userdir` for isolated and parallel-safe work
+- `playwright-fixed-userdir` for reusable state
 - no stealth flags
 - no user-agent spoofing
 - no attempt to modify the user's daily Chrome profile
@@ -132,10 +160,10 @@ This skill is not for:
 
 - bypassing anti-bot systems
 - promising undetectable automation
-- attaching to an existing browser session by default
 - replacing normal browser-operation prompts once setup is complete
+- using the user's everyday Chrome profile by default
 
 ## If The User Wants Stronger Session Reuse
 
-Only after the baseline is working, discuss the official `--extension` route as a second-phase upgrade.
+Only after the baseline works, discuss the official `--extension` route as a later-phase upgrade.
 Do not switch to extension mode by default during first-time setup unless the user explicitly asks for it.

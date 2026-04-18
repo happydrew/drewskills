@@ -2,70 +2,122 @@
 
 ## Scope
 
-This skill standardizes a Windows browser-automation baseline for Codex.
+This guide defines the Windows baseline that this skill should install, repair, and verify.
 
 The baseline is:
 
 - official `@playwright/mcp`
-- local Chrome instead of a generic bundled browser path
-- persistent profile instead of isolated one-off sessions
+- local Chrome
+- English browser locale by default
+- two MCP entries:
+  - `playwright-temp-userdir`
+  - `playwright-fixed-userdir`
 
-## Why This Baseline
+This guide is about setup and repair.
+It is not the runtime operating guide for day-to-day browser actions after setup is complete.
 
-These defaults usually produce a better starting point for real browsing work:
+## Why Local Chrome
 
-- local Chrome is closer to the browser a user actually runs
-- a persistent profile allows state to survive across sessions
-- the configuration is stable and easy to validate
+Prefer local Chrome because it is usually:
 
-This is a setup strategy, not a guarantee against detection or challenges.
+- closer to the browser the user actually runs
+- easier to reason about when debugging
+- more stable for real browsing behavior on Windows
 
-## Baseline MCP Arguments
+Avoid relying on the user's daily Chrome profile.
+Use a separate MCP-specific profile directory instead.
 
-Recommended argument shape:
+## Why English Defaults
 
-```text
-powershell -ExecutionPolicy Bypass -File <launch-script>
--ChromePath <chrome-path>
--ProfileDir <persistent-profile-dir>
--NavigationTimeoutMs 90000
-```
+Prefer English defaults because they reduce language drift in:
 
-The launch script then starts:
+- page button labels
+- browser-exposed locale values
+- automation prompts and debugging artifacts
+- reproducibility across different Windows machines
+
+The baseline should set both:
+
+- Chrome launch language via `--lang=<locale>`
+- Playwright context locale via `contextOptions.locale`
+
+Default locale: `en-US`
+
+## Why Two MCP Entries
+
+The skill should standardize two distinct usage modes because one MCP entry is not enough for both needs.
+
+### `playwright-temp-userdir`
+
+Use for:
+
+- parallel Codex windows
+- one-off browsing tasks
+- isolation between tasks
+- avoiding profile-lock conflicts
+
+Behavior:
+
+- creates a unique temporary user-data-dir when the MCP process starts
+- cleans it up when the MCP process exits
+
+### `playwright-fixed-userdir`
+
+Use for:
+
+- persistent login state
+- cookies and local storage reuse
+- repeated work against the same sites
+
+Behavior:
+
+- uses a dedicated fixed profile directory
+- should not share the user's daily Chrome profile
+- should not be used concurrently by multiple Codex windows against the same directory
+
+## Recommended Script Behavior
+
+`configure-mcp.ps1` should, by default:
+
+- install or repair `playwright-temp-userdir`
+- install or repair `playwright-fixed-userdir`
+- auto-detect local Chrome when possible
+- default to `en-US`
+- use a fixed viewport such as `1600x900`
+- use a larger navigation timeout such as `90000`
+
+Single-entry override is still useful, but the recommended no-argument path should set up both entries.
+
+## Launch Strategy
+
+The launcher should build a generated Playwright MCP config and then run:
 
 ```text
 npx -y @playwright/mcp@latest
---browser chrome
---executable-path <chrome-path>
---user-data-dir <persistent-profile-dir>
+--config <generated-config-json>
 --timeout-navigation 90000
 --viewport-size 1600x900
 ```
 
-If you pass `-ViewportSize`, that fixed size is used instead of the default `1600x900`.
+The generated config should include:
 
-## Why Not Use The Daily Chrome Profile
-
-Do not default to the user's main Chrome profile.
-
-Reasons:
-
-- easier to debug
-- lower risk of corrupting or polluting the user's normal browser state
-- easier to reset
-
-Use a separate persistent profile directory instead.
+- local Chrome executable path
+- the resolved user-data-dir
+- `launchOptions.args` including `--lang=en-US` by default
+- `contextOptions.locale` set to `en-US` by default
+- viewport values that match the chosen baseline
 
 ## Verification Standard
 
 A configuration is considered healthy only if all of these pass:
 
-1. MCP entry exists in `codex mcp list`
-2. `codex mcp get playwright` shows the expected command shape
-3. A fresh `codex exec` process can:
+1. `codex mcp list` shows the expected MCP entries
+2. `codex mcp get playwright-temp-userdir` and `codex mcp get playwright-fixed-userdir` show the expected command shape
+3. a fresh `codex exec` process can:
+   - report `navigator.language` as `en-US`
    - browse a normal web page
-   - read title/text
-   - perform a simple input-and-click interaction
+   - read basic page content
+   - perform a simple input and click interaction
 
 Optional:
 
@@ -73,8 +125,10 @@ Optional:
 
 ## Upgrade Path
 
-Once the baseline works, a second-phase option is:
+Once the baseline works, later upgrades may include:
 
 - official `--extension` mode
+- alternate MCP names for special environments
+- different fixed profile directories for multiple persistent slots
 
-Use that only when the user explicitly wants stronger reuse of an existing Chrome session or browser state.
+These are extensions to the baseline, not the baseline itself.

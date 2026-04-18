@@ -1,7 +1,7 @@
 {
   "name": "playwright-mcp-setup-windows",
   "title": "Playwright MCP Setup Windows",
-  "description": "Install, repair, and validate the official @playwright/mcp browser automation environment on Windows for Codex using local Chrome and a persistent profile.",
+  "description": "Install, repair, and validate the official @playwright/mcp browser automation environment on Windows for Codex using local Chrome, English defaults, and temp/fixed user-data-dir MCP entries.",
   "owners": [
     "happydrew"
   ],
