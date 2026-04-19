@@ -47,6 +47,7 @@ npx skills add https://github.com/happydrew/drewskills.git --agent codex -g --sk
 ## Included Skills
 
 - `git-commit-and-push`
+- `google-trends-feishu-monitor`
 - `import-third-party-skill`
 - `playwright-mcp-setup-windows`
 

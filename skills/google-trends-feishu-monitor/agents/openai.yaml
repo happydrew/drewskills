@@ -1,0 +1,4 @@
+interface:
+  display_name: "Google Trends 飞书监控"
+  short_description: "执行 Google Trends 到飞书的关键词监控"
+  default_prompt: "Use $google-trends-feishu-monitor to run or resume the Google Trends to Feishu keyword monitoring workflow."

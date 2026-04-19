@@ -1,0 +1,20 @@
+{
+  "name": "google-trends-feishu-monitor",
+  "title": "Google Trends Feishu Monitor",
+  "description": "Run the Google Trends to Feishu keyword monitoring workflow for a fixed workbook, including exploding-query collection, GPTs compare filtering, and Feishu writeback orchestration.",
+  "owners": [
+    "happydrew"
+  ],
+  "tags": [
+    "google-trends",
+    "feishu",
+    "monitoring",
+    "keywords",
+    "automation"
+  ],
+  "agents": [
+    "codex"
+  ],
+  "pack": "foundation",
+  "status": "stable"
+}
