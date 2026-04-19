@@ -1,0 +1,19 @@
+{
+  "name": "feishu-sheets-toolkit",
+  "title": "Feishu Sheets Toolkit",
+  "description": "Read, search, and write Feishu Sheets from natural-language requests using the local bootstrap workflow and Feishu app credentials.",
+  "owners": [
+    "happydrew"
+  ],
+  "tags": [
+    "feishu",
+    "sheets",
+    "spreadsheet",
+    "automation"
+  ],
+  "agents": [
+    "codex"
+  ],
+  "pack": "foundation",
+  "status": "stable"
+}

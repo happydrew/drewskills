@@ -41,7 +41,7 @@ PowerShell example that avoids shell encoding issues for non-ASCII paths:
 ```powershell
 $env:IMG_IN = (Get-Item -LiteralPath "C:\path\to\input.png").FullName
 $env:IMG_OUT = [System.IO.Path]::ChangeExtension($env:IMG_IN, "webp")
-node C:\Users\zhuge\.agents\skills\sharp-image-converter\scripts\convert.js --input-env=IMG_IN --output-env=IMG_OUT
+node <skill-path>/scripts/convert.js --input-env=IMG_IN --output-env=IMG_OUT
 ```
 
 ## Single Image Conversion

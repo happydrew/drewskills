@@ -2,9 +2,10 @@
   "name": "foundation",
   "version": "1.1.0",
   "plugin": "drew-foundation",
-  "description": "Drew Grant's default skill pack for Git workflow, third-party skill import, and Playwright MCP setup on Windows.",
+  "description": "Drew Grant's default skill pack for Git workflow, skill import, Feishu automation, browser setup, and image conversion.",
   "skills": [
     "git-commit-and-push",
+    "feishu-sheets-toolkit",
     "import-third-party-skill",
     "google-trends-feishu-monitor",
     "sharp-image-converter",

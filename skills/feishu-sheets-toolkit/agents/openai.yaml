@@ -1,0 +1,7 @@
+interface:
+  display_name: "Feishu Sheets Toolkit"
+  short_description: "Read, search, and write Feishu Sheets via local SDK automation."
+  default_prompt: "Use $feishu-sheets-toolkit to read, search, or update Feishu Sheets data."
+
+policy:
+  allow_implicit_invocation: true

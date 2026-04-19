@@ -6,15 +6,16 @@
     "happydrew"
   ],
   "tags": [
-    "third-party",
-    "imported",
-    "migration"
+    "images",
+    "sharp",
+    "conversion",
+    "webp",
+    "avif"
   ],
   "agents": [
     "claude-code",
     "codex"
   ],
   "pack": "foundation",
-  "status": "draft",
-  "source": "C:\\Users\\zhuge\\.agents\\skills\\sharp-image-converter"
+  "status": "stable"
 }
