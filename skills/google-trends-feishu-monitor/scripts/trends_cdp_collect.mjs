@@ -2,6 +2,7 @@ import { chromium } from 'playwright-core';
 
 const DEFAULT_PORT = Number(process.env.TRENDS_CDP_PORT || 9225);
 const DEFAULT_WAIT_MS = Number(process.env.TRENDS_WAIT_MS || 12000);
+const DEFAULT_EXPLODING_THRESHOLD = Number(process.env.TRENDS_EXPLODING_THRESHOLD || 3000);
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -79,7 +80,7 @@ function isExplodingFormattedValue(value) {
     return true;
   }
   const numeric = Number(normalized.replace(/[%+,]/g, ''));
-  return Number.isFinite(numeric) && numeric > 2000;
+  return Number.isFinite(numeric) && numeric > DEFAULT_EXPLODING_THRESHOLD;
 }
 
 async function withPage(fn) {
