@@ -1,0 +1,21 @@
+{
+  "name": "deploy-mec-backend-modules",
+  "title": "Deploy MEC Backend Modules",
+  "description": "Build and deploy one, multiple, or all supported MEC backend Maven modules from the current working tree to 121.237.182.143:60022, forcing JDK 1.8 for the Maven build and verifying service startup on /soft/mec.",
+  "owners": [
+    "happydrew"
+  ],
+  "tags": [
+    "maven",
+    "java",
+    "deploy",
+    "ssh",
+    "mec"
+  ],
+  "agents": [
+    "codex",
+    "claude-code"
+  ],
+  "pack": "foundation",
+  "status": "stable"
+}

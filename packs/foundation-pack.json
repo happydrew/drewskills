@@ -4,6 +4,7 @@
   "plugin": "drew-foundation",
   "description": "Drew Grant's default skill pack for Git workflow, skill import, Feishu automation, browser setup, and image conversion.",
   "skills": [
+    "deploy-mec-backend-modules",
     "git-commit-and-push",
     "feishu-sheets-toolkit",
     "import-third-party-skill",
