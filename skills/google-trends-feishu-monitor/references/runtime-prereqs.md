@@ -18,6 +18,7 @@
 1. 先确认当前已经存在 CDP 浏览器会话，或其他等价的浏览器自动化环境
 2. 如果脚本报 `ECONNREFUSED 127.0.0.1:9225`，优先判断为“本地 CDP 会话缺失”，不要先误判为代理问题
 3. 推荐复用稳定的本地 Edge/Chromium CDP 会话，而不是在任务中频繁创建临时 profile
+   如果只是本地 `9225` 没监听，可先手动补起本地 Edge/Chromium CDP 会话，再重试 `health`
 4. 运行 `powershell -ExecutionPolicy Bypass -File scripts/run_trends_collect.ps1 health "<one trends url>"`
 5. 确认 Google 首页可达
 6. 确认 Trends explore 页面能打开

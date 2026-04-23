@@ -203,13 +203,30 @@ def generic_intent_summary(candidate: str) -> str:
 
 def normalize_feishu_cell(cell: Any) -> Any:
     if isinstance(cell, list) and cell and isinstance(cell[0], dict):
-        first = cell[0]
-        return first.get("link") or first.get("text") or cell
+        normalized_parts: list[str] = []
+        for index, item in enumerate(cell):
+            if not isinstance(item, dict):
+                normalized_parts.append(str(item))
+                continue
+            if index == 0 and item.get("link"):
+                normalized_parts.append(str(item["link"]))
+                continue
+            if item.get("text"):
+                normalized_parts.append(str(item["text"]))
+                continue
+            if item.get("link"):
+                normalized_parts.append(str(item["link"]))
+        return "".join(normalized_parts)
     return cell
 
 
 def normalize_feishu_matrix(values: list[list[Any]]) -> list[list[Any]]:
     return [[normalize_feishu_cell(cell) for cell in row] for row in values]
+
+
+def sanitize_compare_url(raw_url: str) -> str:
+    # Feishu may split hyperlink-rich text cells when a raw apostrophe remains in the URL.
+    return raw_url.replace("'", "%27")
 
 
 def save_json(path: Path, payload: Any) -> None:
@@ -449,7 +466,7 @@ def main() -> int:
             [
                 item["rootKeyword"],
                 item["candidate"],
-                item["result"]["compareUrl"],
+                sanitize_compare_url(item["result"]["compareUrl"]),
                 generic_intent_summary(item["candidate"]),
                 args.date,
                 item["sourceType"],

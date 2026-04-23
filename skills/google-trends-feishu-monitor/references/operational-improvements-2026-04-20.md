@@ -87,6 +87,12 @@
 - 以后 Google Trends 技能仍通过 wrapper 调用飞书
 - 但判断成功与否时，必须以“写后 readback + revision 变化”为最终标准，不能只信命令退出码
 
+### 1.5 带 `'` 的 compare 链接会触发 Feishu 富文本拆分
+
+- 现象：带 `'` 的 compare 链接回读时可能被拆成 url 片段 + 普通文本，导致校验误报失败
+- 处理：写回前把 `'` 编码成 `%27`；readback 校验前先归一化 Feishu 富文本单元格
+- 落地：`run_monitor_batch.py` 已补上这两个收口动作
+
 ## 2. 流程层面的缺陷
 
 ### 2.1 Related 阶段和 Compare 阶段缺少正式收口脚本
@@ -108,7 +114,7 @@
 
 缺陷：
 
-- 文档里没把 `CDP 9225`、`二维数组 payload`、`UTF-8 写回` 这些具体坑写清楚
+- 文档里没把 `CDP 9225`、`二维数组 payload`、`UTF-8 写回`、`带 apostrophe 的 compare URL` 这些具体坑写清楚
 
 改进：
 
@@ -138,6 +144,7 @@
 - 文档中补充了 `9225` CDP 前提说明
 - 文档中补充了写回 payload 必须是 UTF-8 二维数组 JSON 的要求
 - 文档中补充了“写入结果必须通过 readback 确认”的要求
+- `run_monitor_batch.py` 现已在写回前编码 compare URL 中的 `'`，并在 readback 校验前归一化富文本单元格
 
 ## 4. 后续仍建议继续优化的点
 

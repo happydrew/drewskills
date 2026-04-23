@@ -94,6 +94,8 @@ powershell -ExecutionPolicy Bypass -File scripts/run_trends_collect.ps1 health "
 
 如果健康检查失败，停止批量执行，并提示用户先修复浏览器或代理环境。
 
+如果报 `connect ECONNREFUSED 127.0.0.1:9225`，优先按“本地 CDP 会话缺失”处理；可先手动补起本地 Edge/Chromium CDP 会话，再重试 `health`。
+
 ### 2. 创建本次执行文件
 
 不要把运行中的状态写进稳定的任务说明文档。每次执行都创建新的 run 文件和 checkpoint：
@@ -184,6 +186,8 @@ powershell -ExecutionPolicy Bypass -File scripts/run_feishu_bootstrap.ps1 write 
 - `--values-file` 必须是标准二维数组 JSON
 - 不要用临时 PowerShell 管道去拼写回 JSON
 - 写回 payload 应由 Python 或 Node 直接生成 UTF-8 文件
+- compare 链接里如果候选词包含 `'`，写回前先编码为 `%27`
+- readback 校验前，先把 Feishu 富文本单元格归一化为完整字符串
 - 如果 write 命令没有显式报错，但 revision 不变或回读为空，优先排查 payload 形状和编码，而不是先怀疑飞书权限
 
 ### 7. 优先使用批处理编排脚本
@@ -219,6 +223,7 @@ python scripts/run_monitor_batch.py --workspace . --date 2026-04-20 --run-id 1
   在当前工作区创建新的 run markdown 和 checkpoint JSON。
 - `scripts/run_monitor_batch.py`
   执行完整批次监控，减少手工拼脚本造成的 JSON、编码和校验问题。
+  当前脚本也处理带 `'` 的 compare URL 和 Feishu 富文本 readback 校验。
 
 ## 维护规则
 

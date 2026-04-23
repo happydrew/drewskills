@@ -26,6 +26,8 @@
 - 只写入新增行
 - `--values-file` 必须是标准二维数组 JSON，不能是对象数组
 - 写回 payload 建议由 Python 或 Node 直接生成 UTF-8 文件，不要用临时 PowerShell 文本拼装
+- compare 链接如果包含 `'`，写回前先编码成 `%27`
 - 写入后等待 `3-5` 秒，再读回对应区域
+- readback 校验前，先把 Feishu 富文本单元格归一化成完整文本
 - 如果第一次回读还是旧数据，再多等一会并只重试一次
 - 只有当 revision 变化且 readback 内容与预期一致时，才算真正写入成功
