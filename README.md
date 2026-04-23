@@ -46,6 +46,7 @@ npx skills add https://github.com/happydrew/drewskills.git --agent codex -g --sk
 
 ## Included Skills
 
+- `deploy-mec-backend-modules`
 - `feishu-sheets-toolkit`
 - `git-commit-and-push`
 - `google-trends-feishu-monitor`

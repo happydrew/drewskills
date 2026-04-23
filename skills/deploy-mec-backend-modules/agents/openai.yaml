@@ -1,0 +1,4 @@
+interface:
+  display_name: "Deploy MEC Backend Modules"
+  short_description: "Deploy MEC backend modules to 182.143."
+  default_prompt: "Use $deploy-mec-backend-modules to set JAVA_HOME to C:\\Program Files\\Java\\jdk1.8.0_102, prepend C:\\Program Files\\Java\\jdk1.8.0_102\\bin to Path, run C:\\zhuge\\code\\apache-maven-3.6.3\\bin\\mvn.cmd clean install -DskipTests \"-Dmaven.repo.local=C:\\zhuge\\code\\repository\" in the current mec-backend project, then deploy one, multiple, or all supported modules to 121.237.182.143:60022 under /soft/mec and verify the services."
