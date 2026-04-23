@@ -1,7 +1,0 @@
-interface:
-  display_name: "Remote Server Ops"
-  short_description: "Run SSH-based server operations and fault diagnosis tasks"
-  default_prompt: "Use $remote-server-ops to connect to a specified server over SSH, verify passwordless access, and carry out the requested operations task."
-
-policy:
-  allow_implicit_invocation: true
