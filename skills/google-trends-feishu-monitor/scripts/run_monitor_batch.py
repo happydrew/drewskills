@@ -325,7 +325,7 @@ def write_run_summary(
         "## Status",
         "- status: completed",
         f"- workbook: {workbook_url}",
-        "- browser path: CDP browser session already available and healthy",
+        "- browser path: reused or auto-bootstrapped local CDP browser session on 127.0.0.1:9225",
         "- health: google=pass, trendsExplore=pass, relatedsearches=pass",
         f"- source groups processed: {len(completed_groups)}",
         f"- exploding related queries collected: {exploding_count}",
