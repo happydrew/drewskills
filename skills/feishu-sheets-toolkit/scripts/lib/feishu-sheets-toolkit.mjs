@@ -16,6 +16,19 @@ const DEFAULT_READ_OPTIONS = {
   dateTimeRenderOption: "FormattedString",
 };
 
+function unwrapRequestResult(response) {
+  const payload = response?.data ?? response;
+  if (payload?.code !== undefined && payload.code !== 0) {
+    throw new FeishuSheetsError(
+      payload.msg ?? "Feishu API request failed",
+      payload.code,
+      undefined,
+      payload.data,
+    );
+  }
+  return payload?.data ?? payload;
+}
+
 function toError(error) {
   if (error instanceof FeishuSheetsError) {
     return error;
@@ -92,7 +105,7 @@ export class FeishuSheetsToolkit {
           dateTimeRenderOption: merged.dateTimeRenderOption,
         },
       });
-      const data = response.data ?? response;
+      const data = unwrapRequestResult(response);
       const valueRange = data.valueRange;
       return {
         range: valueRange.range,
@@ -129,7 +142,7 @@ export class FeishuSheetsToolkit {
           },
         },
       });
-      const data = response.data ?? response;
+      const data = unwrapRequestResult(response);
       return {
         updatedRange: data.updatedRange,
         updatedRows: data.updatedRows,

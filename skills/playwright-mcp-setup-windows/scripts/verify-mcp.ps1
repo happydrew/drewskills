@@ -97,7 +97,7 @@ function Invoke-QuietCodexExec {
     Set-Content -LiteralPath $promptPath -Value $Prompt -Encoding UTF8
 
     try {
-        $cmdLine = ('"{0}" exec --dangerously-bypass-approvals-and-sandbox -o "{1}" - < "{2}" >nul 2>nul' -f $script:CodexExecCommand, $OutputPath, $promptPath)
+        $cmdLine = ('"{0}" exec --ephemeral --dangerously-bypass-approvals-and-sandbox -o "{1}" - < "{2}" >nul 2>nul' -f $script:CodexExecCommand, $OutputPath, $promptPath)
         & cmd.exe /d /c $cmdLine | Out-Null
         if ($LASTEXITCODE -ne 0) {
             throw "codex exec failed with exit code $LASTEXITCODE for output path '$OutputPath'."
